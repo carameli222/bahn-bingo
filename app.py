@@ -278,6 +278,16 @@ def login():
                 (username,)
             ).fetchone()
 
+            if user is None:
+
+                resp = make_response(redirect("/"))
+
+                resp.delete_cookie("username")
+
+                conn.close()
+
+                return resp
+
             if not user:
                 conn.execute(
                     "INSERT INTO users(username) VALUES(?)",
