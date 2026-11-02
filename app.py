@@ -279,9 +279,7 @@ def login():
             ).fetchone()
 
             if user is None:
-
                 resp = make_response(redirect("/"))
-
                 resp.delete_cookie("username")
 
                 conn.close()
@@ -319,6 +317,14 @@ def dashboard():
         "SELECT * FROM users WHERE username=?",
         (username,)
     ).fetchone()
+
+    if user is None:
+        resp = make_response(redirect("/"))
+        resp.delete_cookie("username")
+
+        conn.close()
+
+        return resp
 
     all_reasons = conn.execute(
         "SELECT * FROM reasons ORDER BY reason"
@@ -436,6 +442,14 @@ def update_checks():
         "SELECT * FROM users WHERE username=?",
         (username,)
     ).fetchone()
+
+    if user is None:
+        resp = make_response(redirect("/"))
+        resp.delete_cookie("username")
+
+        conn.close()
+
+        return resp
 
     conn.execute(
         "DELETE FROM user_reasons WHERE user_id=?",
