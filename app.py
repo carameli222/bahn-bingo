@@ -138,11 +138,6 @@ Logout
 Account löschen
 </a>
 
-
-<a class="logout-btn" href="/logout">
-    Logout
-</a>
-
 </div>
 
 <div class="card">
