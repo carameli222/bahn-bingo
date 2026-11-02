@@ -78,6 +78,20 @@ button{
     cursor:pointer;
 }
 
+.logout-btn{
+    display:inline-block;
+    margin-top:10px;
+    padding:10px 16px;
+    background:#d40511;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+}
+
+.logout-btn:hover{
+    background:#aa0000;
+}
+
 .progress-container{
     width:100%;
     background:#ddd;
@@ -111,6 +125,11 @@ th,td{
 <div class="card">
 <h1>🚆 DB-Bingo</h1>
 <p>Hallo {{ username }}!</p>
+
+<a class="logout-btn" href="/logout">
+    Logout
+</a>
+
 </div>
 
 <div class="card">
