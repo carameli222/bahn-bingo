@@ -126,6 +126,19 @@ th,td{
 <h1>🚆 DB-Bingo</h1>
 <p>Hallo {{ username }}!</p>
 
+<br>
+
+<a class="logout-btn" href="/logout">
+Logout
+</a>
+
+<a class="delete-btn"
+   href="/delete_account"
+   onclick="return confirm('Account wirklich löschen?')">
+Account löschen
+</a>
+
+
 <a class="logout-btn" href="/logout">
     Logout
 </a>
@@ -157,6 +170,12 @@ value="{{r['id']}}"
 >
 
 {{r['reason']}}
+
+<a href="/delete_reason/{{r['id']}}"
+   onclick="return confirm('Diesen Grund wirklich löschen?')">
+   🗑️
+</a>
+
 </div>
 
 {% endfor %}
@@ -476,6 +495,61 @@ def update_checks():
 
     return redirect("/dashboard")
 
+@app.route("/delete_reason/<int:reason_id>")
+def delete_reason(reason_id):
+
+    conn = get_db()
+
+    conn.execute(
+        "DELETE FROM user_reasons WHERE reason_id=?",
+        (reason_id,)
+    )
+
+    conn.execute(
+        "DELETE FROM reasons WHERE id=?",
+        (reason_id,)
+    )
+
+    conn.commit()
+    conn.close()
+
+    return redirect("/dashboard")
+
+@app.route("/delete_account")
+def delete_account():
+
+    username = request.cookies.get("username")
+
+    if not username:
+        return redirect("/")
+
+    conn = get_db()
+
+    user = conn.execute(
+        "SELECT * FROM users WHERE username=?",
+        (username,)
+    ).fetchone()
+
+    if user:
+
+        conn.execute(
+            "DELETE FROM user_reasons WHERE user_id=?",
+            (user["id"],)
+        )
+
+        conn.execute(
+            "DELETE FROM users WHERE id=?",
+            (user["id"],)
+        )
+
+        conn.commit()
+
+    conn.close()
+
+    resp = make_response(redirect("/"))
+    resp.delete_cookie("username")
+
+    return resp
 
 @app.route("/logout")
 def logout():
