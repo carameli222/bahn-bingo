@@ -1,2 +1,1 @@
 Flask
-psychopg2-binary
